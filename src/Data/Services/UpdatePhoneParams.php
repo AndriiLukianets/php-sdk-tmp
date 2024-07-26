@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Upmind\Sdk\Data\Services;
 
-use DateTimeInterface;
 use Upmind\Sdk\Data\AbstractParams;
 
 /**

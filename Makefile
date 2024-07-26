@@ -15,7 +15,7 @@ build:
 	docker build -t $(IMAGE_NAME) .
 
 # Run the Docker container in the background
-run:
+start:
 	docker run -d --name $(CONTAINER_NAME) -v $(PWD):$(MOUNT_DIR) $(IMAGE_NAME)
 
 # Stop the Docker container
@@ -23,7 +23,7 @@ stop:
 	docker stop $(CONTAINER_NAME)
 
 # Get a shell into the running Docker container
-shell:
+sh:
 	docker exec -it $(CONTAINER_NAME) /bin/bash
 
 # Run phpstan

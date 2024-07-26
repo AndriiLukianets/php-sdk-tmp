@@ -8,11 +8,14 @@ use Psr\Http\Message\ResponseInterface;
 
 class ApiResponse
 {
-    private ?array $decodedBody = null;
+    private ResponseInterface $psrResponse;
 
-    public function __construct(
-        private ResponseInterface $psrResponse
-    ) {
+    private $decodedBody = null;
+
+    public function __construct(ResponseInterface $psrResponse)
+    {
+        $this->psrResponse = $psrResponse;
+
         $this->decodedBody = json_decode($psrResponse->getBody()->getContents(), true);
     }
 
@@ -35,17 +38,24 @@ class ApiResponse
     /**
      * Get the API response status if a body is returned.
      */
-    public function getResponseStatus(): ?ResponseStatus
+    public function getResponseStatus(): bool
     {
-        return ResponseStatus::tryFrom($this->decodedBody['status'] ?? null);
+        if ($this->decodedBody['status'] == 'OK') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * For paginated responses, the total indicates the total number of available
      * records. For group_count responses, the total is an associative array of
      * counts for each group.
+     *
+     * @return null|int|array
+     * @TODO: return int or array?
      */
-    public function getResponseTotal(): int|array|null
+    public function getResponseTotal()
     {
         if (!isset($this->decodedBody['total'])) {
             return null;

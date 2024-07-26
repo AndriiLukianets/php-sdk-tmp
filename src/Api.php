@@ -142,7 +142,9 @@ class Api
         ?AbstractParams $bodyParams = null,
         ?QueryParams $queryParams = null
     ): ApiResponse {
-        $queryParams ??= new QueryParams();
+        if ($queryParams === null) {
+            $queryParams = new QueryParams();
+        }
 
         $this->fillDefaultParams($queryParams, $bodyParams);
 
@@ -156,7 +158,7 @@ class Api
             ->withHeader('User-Agent', $this->getUserAgent())
             ->withHeader('Authorization', 'Bearer ' . $this->config->getToken());
 
-        if (!empty($bodyParams?->toArray())) {
+        if ($bodyParams !== null && !empty($bodyParams->toArray())) {
             if (in_array(strtoupper($method), ['HEAD', 'GET', 'DELETE'])) {
                 throw new \InvalidArgumentException('Request body is not allowed for this method');
             }
@@ -188,7 +190,7 @@ class Api
 
     private function fillDefaultParams(QueryParams $queryParams, ?AbstractParams $bodyParams = null): void
     {
-        $fillParams = !empty($bodyParams?->toArray())
+        $fillParams = ($bodyParams !== null && !empty($bodyParams->toArray()))
             ? $bodyParams
             : $queryParams;
 

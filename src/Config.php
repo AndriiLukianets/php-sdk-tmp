@@ -9,19 +9,37 @@ namespace Upmind\Sdk;
  */
 class Config
 {
+
+    /** @var string $token Your Upmind API token */
+    private string $token;
+
+    /** @var string $brandId The default brand id to use for API requests */
+    private ?string $brandId = null;
+
+    /** @var bool $withoutNotifications Prevent create, update and delete requests from triggering notifications */
+    private bool $withoutNotifications = false;
+
+    /** @var bool $debug Whether or not to stream API requests + responses to STDERR by default */
+    private bool $debug = false;
+
+    private string $hostname = 'api.upmind.io';
+
+    private string $protocol = 'https';
+
     public function __construct(
-        /** @var string $token Your Upmind API token */
-        private string $token,
-        /** @var string $brandId The default brand id to use for API requests */
-        private ?string $brandId = null,
-        /** @var bool $withoutNotifications Prevent create, update and delete requests from triggering notifications */
-        private bool $withoutNotifications = false,
-        /** @var bool $debug Whether or not to stream API requests + responses to STDERR by default */
-        private bool $debug = false,
-        private string $hostname = 'api.upmind.io',
-        private string $protocol = 'https'
+        string $token,
+        ?string $brandId = null,
+        bool $withoutNotifications = false,
+        bool $debug = false,
+        string $hostname = 'api.upmind.io',
+        string $protocol = 'https'
     ) {
-        //
+        $this->token = $token;
+        $this->brandId = $brandId;
+        $this->withoutNotifications = $withoutNotifications;
+        $this->debug = $debug;
+        $this->hostname = $hostname;
+        $this->protocol = $protocol;
     }
 
     public function getToken(): string
