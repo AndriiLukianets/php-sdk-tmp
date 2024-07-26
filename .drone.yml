@@ -1,0 +1,90 @@
+---
+kind: pipeline
+type: docker
+name: Unittests
+
+trigger:
+    event:
+        - push
+        - pull_request
+        - tag
+
+workspace:
+    path: /app
+
+#services:
+#    -   name: upmind-sdk-php-smocker
+#        image: thiht/smocker:0.18.5
+
+steps:
+    -   name: build ci image
+        image: plugins/docker
+        settings:
+            repo: docker.dev.velia.net/upmind-sdk-php
+            context: .
+            dockerfile: Dockerfile
+            target: ci
+            registry: docker.dev.velia.net
+            force_tag: true
+            tags:
+                - php7.4
+            username:
+                from_secret: docker_registry_username
+            password:
+                from_secret: docker_registry_password
+            when:
+                branch:
+                    - develop
+
+#    -   name: composer
+#        image: composer:2
+#        volumes:
+#            -   name: composer_cache
+#                path: /composer
+#        environment:
+#            COMPOSER_HOME: /composer
+#            COMPOSER_NO_INTERACTION: 1
+#        commands:
+#            - cd app
+#            - composer install --optimize-autoloader --ignore-platform-reqs --no-interaction
+
+#    -   name: unittest
+#        image: docker.dev.velia.net/upmind-sdk-php:latest
+#        pull: always
+#        commands:
+#            - cd app
+#            - ./vendor/bin/phpunit -dmemory_limit=256M --no-logging --no-coverage -c phpunit.xml.dist
+
+#    -   name: inform slack for unittest
+#        image: plugins/slack
+#        settings:
+#            webhook:
+#                from_secret: slack_webhook
+#            channel: dev-velia-ci
+#            username: drone
+#            template: "CLS-Client Unittests on {{build.branch}}."
+#        when:
+#            status: [ success, failure ]
+
+    -   name: create package and publish
+        image: docker.dev.velia.net/upmind-sdk-php:latest
+        pull: always
+        environment:
+            GITEA_PACKAGES_TOKEN:
+                from_secret: gitea_packages_token
+        commands:
+            - cd app
+            - zip -9 -r upmind-sdk-php.zip src composer.json composer.lock README.md
+            - curl --user alukianets:$GITEA_PACKAGES_TOKEN --upload-file upmind-sdk-php.zip https://code.tools.int.velia.net/api/packages/velia.net/composer?version=${DRONE_TAG}
+        when:
+            event:
+                - tag
+
+#volumes:
+#    -   name: composer_cache
+#        host:
+#            path: /opt/drone/tmp/composer
+
+image_pull_secrets:
+    - docker_registry_config
+    - gitea_packages_token

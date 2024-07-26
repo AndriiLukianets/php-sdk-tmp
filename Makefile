@@ -1,40 +1,27 @@
-# Makefile for building and running upmind-sdk-php
+THIS_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 
 # Variables
 IMAGE_NAME = upmind-sdk-php
 CONTAINER_NAME = upmind-sdk-php
 MOUNT_DIR = /upmind-sdk-php
 
-.PHONY: all build run stop shell clean
+## —— 🎵 🐳 The Makefile 🐳 🎵 ——————————————————————————————————
+help: ## Outputs this help screen.
+	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-# Default target
-setup: build run
 
-# Build the Docker image
-build:
+build: ## Build the Docker image
 	docker build -t $(IMAGE_NAME) .
 
-# Run the Docker container in the background
-start:
+start: ## Run the Docker container in the background
 	docker run -d --name $(CONTAINER_NAME) -v $(PWD):$(MOUNT_DIR) $(IMAGE_NAME)
 
-# Stop the Docker container
-stop:
+stop: ## Stop the Docker container
 	docker stop $(CONTAINER_NAME)
 
-# Get a shell into the running Docker container
-sh:
+sh: ## Get a shell into the running Docker container
 	docker exec -it $(CONTAINER_NAME) /bin/bash
 
-# Run phpstan
-static-analysis:
-	docker exec -it $(CONTAINER_NAME) ./vendor/bin/phpstan analyse --memory-limit=1G
-
-# Run php-cs-fixer
-coding-standards:
-	docker exec -it $(CONTAINER_NAME) php ./bin/php-cs-fixer-v3.phar fix --config=./.php-cs-fixer.dist.php
-
-# Clean target
-clean:
+clean: ## Clean target
 	docker rm -f $(CONTAINER_NAME)
 	docker rmi $(IMAGE_NAME)

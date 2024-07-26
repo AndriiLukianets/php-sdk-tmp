@@ -1,5 +1,5 @@
 {
-    "name": "upmind/sdk",
+    "name": "velia/upmind-sdk-php",
     "description": "PHP SDK for the Upmind API",
     "type": "library",
     "license": "GPL-3.0-only",
@@ -12,10 +12,13 @@
         {
             "name": "Harry Lewis",
             "email": "harry@upmind.com"
+        },
+        {
+          "name": "Andrii Lukianets",
+          "email": "alukianets@velia.net"
         }
     ],
     "require-dev": {
-        "phpstan/phpstan": "^1.11"
     },
     "require": {
         "php": "^7.4|^8.2",
