@@ -1,6 +1,6 @@
 #! /bin/sh
 
-cd /upmind-sdk-php;
+cd /app;
 
 printf "Installing Dependencies\n";
 # /usr/local/bin/composer install --no-interaction --no-scripts

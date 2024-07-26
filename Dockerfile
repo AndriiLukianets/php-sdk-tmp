@@ -2,6 +2,7 @@ FROM php:7.4-apache
 
 RUN apt-get update && apt-get install -y \
     git \
+    zip \
     libzip-dev \
     unzip \
     libicu-dev \
@@ -23,15 +24,15 @@ RUN mkdir -p /var/log/php/ \
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-WORKDIR /upmind-sdk-php
+WORKDIR /app
 
 COPY docker/start.sh docker/start.sh
 
 RUN chmod +x docker/start.sh
 
-VOLUME ["/upmind-sdk-php"]
+VOLUME ["/app"]
 
-EXPOSE 80/tcp
-EXPOSE 9000
+#EXPOSE 80/tcp
+#EXPOSE 9000
 
 CMD ["docker/start.sh"]
