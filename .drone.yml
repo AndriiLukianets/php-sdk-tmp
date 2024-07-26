@@ -5,8 +5,8 @@ name: Unittests
 
 trigger:
     event:
-        - push
-        - pull_request
+#        - push
+#        - pull_request
         - tag
 
 workspace:
@@ -77,9 +77,9 @@ steps:
             - cd /app
             - zip -9 -r upmind-sdk-php.zip src composer.json composer.lock README.md
             - curl --user alukianets:$GITEA_PACKAGES_TOKEN --upload-file upmind-sdk-php.zip https://code.tools.int.velia.net/api/packages/velia.net/composer?version=${DRONE_TAG}
-#        when:
-#            event:
-#                - tag
+        when:
+            event:
+                - tag
 
 #volumes:
 #    -   name: composer_cache
