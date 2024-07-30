@@ -1,27 +1,32 @@
 THIS_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 
-# Variables
-IMAGE_NAME = upmind-sdk-php
+DOCKER = docker compose
+DOCKER_COMP = docker compose
 CONTAINER_NAME = upmind-sdk-php
-MOUNT_DIR = /upmind-sdk-php
 
 ## —— 🎵 🐳 The Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen.
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-
 build: ## Build the Docker image
-	docker build -t $(IMAGE_NAME) .
+	@$(DOCKER_COMP) build
+	@$(DOCKER_COMP) up -d --force-recreate
+	@$(DOCKER_COMP) exec $(CONTAINER_NAME) composer install --no-scripts -n
 
 start: ## Run the Docker container in the background
-	docker run -d --name $(CONTAINER_NAME) -v $(PWD):$(MOUNT_DIR) $(IMAGE_NAME)
+	@$(DOCKER_COMP) up -d --force-recreate
 
-stop: ## Stop the Docker container
-	docker stop $(CONTAINER_NAME)
+stop: ## Stop container
+	@$(DOCKER_COMP) stop
 
-sh: ## Get a shell into the running Docker container
-	docker exec -it $(CONTAINER_NAME) /bin/bash
+sh: ## Make sh on container
+	@$(DOCKER_COMP) exec -ti $(CONTAINER_NAME) sh
 
-clean: ## Clean target
-	docker rm -f $(CONTAINER_NAME)
-	docker rmi $(IMAGE_NAME)
+outdated: ## Check for outdated vendors
+	@$(DOCKER_COMP) exec $(CONTAINER_NAME) composer outdated
+
+#tests: ## Run unittests
+#	@$(DOCKER_COMP) exec -ti cls-client sh -c "./vendor/bin/phpunit --verbose --no-coverage -c ./phpunit.xml.dist tests"
+
+stan:
+	docker exec -it $(CONTAINER_NAME) ./vendor/bin/phpstan analyse --memory-limit=1G

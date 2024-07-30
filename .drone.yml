@@ -23,7 +23,7 @@ steps:
             repo: docker.dev.velia.net/upmind-sdk-php
             context: .
             dockerfile: Dockerfile
-#            target: ci
+            target: base
             registry: docker.dev.velia.net
             force_tag: true
             tags:

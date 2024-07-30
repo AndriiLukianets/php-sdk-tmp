@@ -1,42 +1,10 @@
-# [Upmind](https://github.com/upmind-automation) - SDK
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/upmind/sdk.svg?style=flat-square)](https://packagist.org/packages/upmind/sdk)
-
-**This library is currently in beta and does not cover all features of the Upmind API.**
-
-This SDK can be used to streamline PHP integrations with the Upmind API.
-
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Getting Started](#getting-started)
-  - [Pagination](#pagination)
-  - [Relations](#relations)
-  - [Creating Resources](#creating-resources)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [Credits](#credits)
-- [License](#license)
-- [Upmind](#upmind)
+# Upmind - SDK - PHP
 
 ## Requirements
 
-- PHP 8.2 or higher
+- PHP 7.4
 - Composer
 - [Upmind Starter](https://upmind.com/pricing) plan or higher
-
-## Installation
-
-```bash
-composer require upmind/sdk
-```
-
-This library makes use of the [HTTPLUG](https://docs.php-http.org/en/latest/index.html) abstraction for making HTTP requests, using [discovery](https://docs.php-http.org/en/latest/discovery.html) to automatically detect an HTTP client to use. Because the library depends on the virtual package `psr/http-client-implementation` you will need to first install a compatible HTTP [client implementation](https://packagist.org/providers/psr/http-client-implementation) e.g., [php-http/guzzle7-adapter](https://packagist.org/packages/php-http/guzzle7-adapter).
-
-It's possible to use any implementations of the following PSRs:
-- [PSR-18 HTTP Client](https://www.php-fig.org/psr/psr-18/)
-- [PSR-17 HTTP Factory](https://www.php-fig.org/psr/psr-17/)
-- [PSR-3 Logger](https://www.php-fig.org/psr/psr-3/)
 
 ## Usage
 

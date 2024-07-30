@@ -1,0 +1,22 @@
+services:
+    upmind-sdk-php:
+        image: upmind-sdk-php:php7.4
+        container_name: upmind-sdk-php
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: dev
+        restart: "no"
+        volumes:
+            - ./docker/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+            - ./src:/src
+        environment:
+            APP_ENV: dev
+            PHP_IDE_CONFIG: "serverName=upmind-sdk-php.localhost"
+
+#    cls-client-smocker:
+#        image: thiht/smocker:0.18.5
+#        container_name: cls-client-smocker
+#        restart: "no"
+#        ports:
+#            - "8086:8081"
