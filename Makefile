@@ -20,7 +20,7 @@ stop: ## Stop container
 	@$(DOCKER_COMP) stop
 
 sh: ## Make sh on container
-	@$(DOCKER_COMP) exec -ti $(CONTAINER_NAME) sh
+	@$(DOCKER) exec -ti $(CONTAINER_NAME) sh
 
 outdated: ## Check for outdated vendors
 	@$(DOCKER_COMP) exec $(CONTAINER_NAME) composer outdated
